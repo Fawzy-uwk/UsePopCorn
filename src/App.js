@@ -88,7 +88,7 @@ export default function App() {
         setError(false);
         setLoader(true);
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
+          `https://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
           { signal: controller.signal }
         );
         if (!res.ok) throw new Error("Something went wrong!");
@@ -337,7 +337,7 @@ function SelectedMovie({ selected, setSelected, watchedHandler, watched }) {
       async function getMovieDetails() {
         setLoader(true);
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${KEY}&i=${selected}`
+          `https://www.omdbapi.com/?apikey=${KEY}&i=${selected}`
         );
         const data = await res.json();
         console.log(data);
