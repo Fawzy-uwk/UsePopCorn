@@ -48,8 +48,9 @@ import StarRating from "./StarRating";
 // ];
 
 const average = (arr) =>
-  arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
-const key = "426a03fa";
+  arr?.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+const KEY = "426a03fa";
+
 export default function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
@@ -63,7 +64,7 @@ export default function App() {
   // const [watched, setWatched] = useState([]);
   const [watched, setWatched] = useState(() => {
     const storedValue = localStorage.getItem("watched");
-    return JSON.parse(storedValue);
+    return JSON.parse(storedValue) || []; // Ensure that the value is always an array or initialize as an empty array
   });
   const selectHandler = (id) => {
     setSelected(id === selected ? null : id);
@@ -87,12 +88,13 @@ export default function App() {
         setError(false);
         setLoader(true);
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${key}&s=${query}`,
+          `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
           { signal: controller.signal }
         );
         if (!res.ok) throw new Error("Something went wrong!");
 
         const data = await res.json();
+
         if (data.Response === "False") throw new Error("Movie not found!");
         setMovies(data.Search);
         setLoader(false);
@@ -288,7 +290,7 @@ function SelectedMovie({ selected, setSelected, watchedHandler, watched }) {
   const [movie, setMovie] = useState({});
   const [loader, setLoader] = useState();
   const [userRating, setUserRating] = useState("");
-  const isWatched = watched.map((movie) => movie.imdbID).includes(selected);
+  const isWatched = watched?.map((movie) => movie.imdbID).includes(selected);
 
   //count how many times the user changed the movie rating before adding to list
 
@@ -297,7 +299,7 @@ function SelectedMovie({ selected, setSelected, watchedHandler, watched }) {
   useEffect(() => {
     if (userRating) rateRef.current = rateRef.current + 1;
   }, [userRating]);
-  const watchedUserRating = watched.find(
+  const watchedUserRating = watched?.find(
     (movie) => movie.imdbID === selected
   )?.userRating;
   const {
@@ -335,10 +337,12 @@ function SelectedMovie({ selected, setSelected, watchedHandler, watched }) {
       async function getMovieDetails() {
         setLoader(true);
         const res = await fetch(
-          `http://www.omdbapi.com/?apikey=${key}&i=${selected}`
+          `http://www.omdbapi.com/?apikey=${KEY}&i=${selected}`
         );
         const data = await res.json();
+        console.log(data);
         setMovie(data);
+
         setLoader(false);
       }
       getMovieDetails();
@@ -364,9 +368,9 @@ function SelectedMovie({ selected, setSelected, watchedHandler, watched }) {
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split(" ").at(0)),
       userRating,
-      ratingRef:rateRef.current
+      ratingRef: rateRef.current,
     };
-    
+
     watchedHandler(newWatched);
     setSelected(null);
   };
@@ -425,9 +429,9 @@ function SelectedMovie({ selected, setSelected, watchedHandler, watched }) {
   );
 }
 function WatchedSummary({ watched }) {
-  const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
-  const avgUserRating = average(watched.map((movie) => movie.userRating));
-  const avgRuntime = average(watched.map((movie) => movie.runtime));
+  const avgImdbRating = average(watched?.map((movie) => movie.imdbRating));
+  const avgUserRating = average(watched?.map((movie) => movie.userRating));
+  const avgRuntime = average(watched?.map((movie) => movie.runtime));
 
   return (
     <div className="summary">
@@ -435,19 +439,19 @@ function WatchedSummary({ watched }) {
       <div>
         <p>
           <span>#️⃣</span>
-          <span>{watched.length} movies</span>
+          <span>{watched?.length} movies</span>
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating.toFixed(2)}</span>
+          <span>{avgImdbRating?.toFixed(2)}</span>
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating.toFixed(2)}</span>
+          <span>{avgUserRating?.toFixed(2)}</span>
         </p>
         <p>
           <span>⏳</span>
-          <span>{avgRuntime.toFixed(2)} min</span>
+          <span>{avgRuntime?.toFixed(2)} min</span>
         </p>
       </div>
     </div>
@@ -457,7 +461,7 @@ function WatchedSummary({ watched }) {
 function WatchedMoviesList({ watched, deleteHandler }) {
   return (
     <ul className="list">
-      {watched.map((movie) => (
+      {watched?.map((movie) => (
         <WatchedMovie
           deleteHandler={deleteHandler}
           movie={movie}

@@ -30,16 +30,20 @@ body {
   color: var(--color-text);
   background-color: var(--color-background-900);
   padding: 2.4rem;
+  width: 100%;
 }
 
 /* ******* */
 
 .nav-bar {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  width: 100%;
+  display: flex;
   align-items: center;
-  height: 7.2rem;
-  padding: 0 3.2rem;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  
+  padding: 15px 3.2rem;
   background-color: var(--color-primary);
   border-radius: 0.9rem;
 }
@@ -48,13 +52,15 @@ body {
   margin-top: 2.4rem;
   height: calc(100vh - 7.2rem - 3 * 2.4rem);
   display: flex;
+  
   gap: 2.4rem;
   justify-content: center;
+  width: 100%;
 }
 
 .box {
-  width: 42rem;
-  max-width: 42rem;
+  width: 100%;
+  
   background-color: var(--color-background-500);
   border-radius: 0.9rem;
   overflow: scroll;
@@ -214,7 +220,9 @@ body {
 /* ******* */
 
 .summary {
-  padding: 2.2rem 3.2rem 1.8rem 3.2rem;
+  width: 100%;
+  padding: 10px 20px;
+  
   border-radius: 0.9rem;
   background-color: var(--color-background-100);
   box-shadow: 0 1.2rem 2.4rem rgba(0, 0, 0, 0.2);
@@ -229,6 +237,7 @@ body {
 .summary div {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 2.4rem;
   font-size: 1.6rem;
   font-weight: 600;
@@ -342,6 +351,11 @@ body {
   justify-content: center;
 }
 
+@media screen and (max-width:768px){
+  .main{
+    flex-wrap: wrap;
+  }
+}
 /*
 SPACING SYSTEM (px)
 2 / 4 / 8 / 12 / 16 / 24 / 32 / 40 / 48 / 64 / 80 / 96 / 128
